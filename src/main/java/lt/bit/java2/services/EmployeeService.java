@@ -1,6 +1,7 @@
 package lt.bit.java2.services;
 
 import lt.bit.java2.entities.Employee;
+import lt.bit.java2.entities.Salary;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -38,7 +39,27 @@ public class EmployeeService {
         employee.setHireDate(resultSet.getDate("hire_date").toLocalDate());
         employee.setBirthDate(resultSet.getDate("birth_date").toLocalDate());
 
+        // ar yra duomenys is salary?
+        if (resultSet.getDate("from_date") != null) {
+            employee.setSalaries(new ArrayList<>());
+            do {
+                Salary salary = mapSalaryFromResult(resultSet);
+                salary.setEmployee(employee);
+                employee.getSalaries().add(salary);
+            } while(resultSet.next());
+        }
+
         return employee;
+    }
+
+    private Salary mapSalaryFromResult(ResultSet resultSet) throws SQLException {
+        Salary salary = new Salary();
+
+        salary.setFromDate(resultSet.getDate("from_date").toLocalDate());
+        salary.setToDate(resultSet.getDate("to_date").toLocalDate());
+        salary.setSalary(resultSet.getInt("salary"));
+
+        return salary;
     }
 
     /**
@@ -80,7 +101,10 @@ public class EmployeeService {
      * @return darbuotojo info
      */
     public Employee getEmployee(int empNo) {
-        final String SQL = "SELECT * FROM employees WHERE emp_no = ?";
+        final String SQL = "SELECT e.emp_no, first_name, last_name, birth_date, hire_date, gender, salary, from_date, to_date " +
+                " FROM employees e" +
+                " LEFT JOIN salaries s ON e.emp_no = s.emp_no " +
+                " WHERE e.emp_no = ?";
         try (Connection connection = connectionsManager.getConnection(useConnectionPool);
              PreparedStatement statement = connection.prepareStatement(SQL);
         ) {

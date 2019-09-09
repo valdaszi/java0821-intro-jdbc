@@ -18,7 +18,10 @@ public class Mysql {
 
     public static void main(String[] args) {
 
-
+        System.out.println("args = " + args.length);
+        for (String a : args) {
+            System.out.println(a);
+        }
 
 //        Employee employee = employeeService.getEmployee(9);
 //        if (employee != null) throw new ArithmeticException("Kazkas negerai #9");
@@ -41,11 +44,15 @@ public class Mysql {
 //        employees = employeeService.getEmployees(LocalDate.of(2001, 12, 31), 5, 1000);
 //        System.out.println(employees);
 
-        EmployeeService employeeService = new EmployeeService();
-        test(employeeService);
+//        EmployeeService employeeService = new EmployeeService();
+//        test(employeeService);
+//
+//        employeeService.setUseConnectionPool(true);
+//        test(employeeService);
 
-        employeeService.setUseConnectionPool(true);
-        test(employeeService);
+        EmployeeService employeeService = new EmployeeService();
+        Employee emp10001 = employeeService.getEmployee(10001);
+        System.out.println(emp10001);
     }
 
     static void test(EmployeeService employeeService) {

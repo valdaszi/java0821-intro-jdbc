@@ -1,6 +1,7 @@
 package lt.bit.java2.entities;
 
 import java.time.LocalDate;
+import java.util.Collection;
 
 /**
  * Employee entity
@@ -22,11 +23,14 @@ public class Employee {
      * Primary key
      */
     private Integer empNo;
+
     private String firstName;
     private String lastName;
     private LocalDate birthDate;
     private LocalDate hireDate;
     private String gender;
+
+    private Collection<Salary> salaries;
 
     public Integer getEmpNo() {
         return empNo;
@@ -76,6 +80,14 @@ public class Employee {
         this.gender = gender;
     }
 
+    public Collection<Salary> getSalaries() {
+        return salaries;
+    }
+
+    public void setSalaries(Collection<Salary> salaries) {
+        this.salaries = salaries;
+    }
+
     @Override
     public String toString() {
         return "Employee{" +
@@ -85,6 +97,7 @@ public class Employee {
                 ", birthDate=" + birthDate +
                 ", hireDate=" + hireDate +
                 ", gender='" + gender + '\'' +
+                ", salaries=" + getSalaries() +
                 '}';
     }
 }
