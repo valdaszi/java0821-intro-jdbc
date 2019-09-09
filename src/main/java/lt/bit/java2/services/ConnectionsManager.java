@@ -23,7 +23,7 @@ public class ConnectionsManager {
     private Properties getProperties() {
         if (properties == null) {
             properties = new Properties();
-            //TODO uzkrauti duomenis i properties is app.properties failo
+            //uzkrauname duomenis i properties is app.properties failo
             try {
                 InputStream is = ConnectionsManager.class.getClassLoader().getResourceAsStream("app.properties");
                 properties.load(is);
