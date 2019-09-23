@@ -35,17 +35,17 @@ public class EmployeeService {
         employee.setEmpNo(resultSet.getInt("emp_no"));
         employee.setFirstName(resultSet.getString("first_name"));
         employee.setLastName(resultSet.getString("last_name"));
-        employee.setGender(resultSet.getString("gender"));
+//        employee.setGender(resultSet.getString("gender"));
         employee.setHireDate(resultSet.getDate("hire_date").toLocalDate());
         employee.setBirthDate(resultSet.getDate("birth_date").toLocalDate());
 
         // ar yra duomenys is salary?
         if (resultSet.getDate("from_date") != null) {
-            employee.setSalaries(new ArrayList<>());
+            //employee.setSalaries(new ArrayList<>());
             do {
-                Salary salary = mapSalaryFromResult(resultSet);
-                salary.setEmployee(employee);
-                employee.getSalaries().add(salary);
+//                Salary salary = mapSalaryFromResult(resultSet);
+//                salary.setEmployee(employee);
+//                employee.getSalaries().add(salary);
             } while(resultSet.next());
         }
 
@@ -135,6 +135,8 @@ public class EmployeeService {
              PreparedStatement preparedStatement = connection.prepareStatement(
                      "UPDATE employees SET first_name = ?, last_name = ?, gender = ?, birth_date = ?, hire_date = ? WHERE emp_no = ?")) {
 
+            connection.setAutoCommit(false);
+
             preparedStatement.setString(1, employee.getFirstName());
             preparedStatement.setString(2, employee.getLastName());
             preparedStatement.setString(3, employee.getGender());
@@ -144,28 +146,30 @@ public class EmployeeService {
 
             int r = preparedStatement.executeUpdate();
 
+            connection.commit();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     public void createEmployee(Employee employee) {
-        try (Connection connection = connectionsManager.getConnection(useConnectionPool);
-             PreparedStatement preparedStatement = connection.prepareStatement(
-                     "INSERT INTO employees(first_name, last_name, gender, birth_date, hire_date, emp_no) VALUES(?,?,?,?,?,?)")) {
-
-            preparedStatement.setString(1, employee.getFirstName());
-            preparedStatement.setString(2, employee.getLastName());
-            preparedStatement.setString(3, employee.getGender());
-            preparedStatement.setDate(4, Date.valueOf(employee.getBirthDate()));
-            preparedStatement.setDate(5, Date.valueOf(employee.getHireDate()));
-            preparedStatement.setInt(6, employee.getEmpNo());
-
-            preparedStatement.execute();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+//        try (Connection connection = connectionsManager.getConnection(useConnectionPool);
+//             PreparedStatement preparedStatement = connection.prepareStatement(
+//                     "INSERT INTO employees(first_name, last_name, gender, birth_date, hire_date, emp_no) VALUES(?,?,?,?,?,?)")) {
+//
+//            preparedStatement.setString(1, employee.getFirstName());
+//            preparedStatement.setString(2, employee.getLastName());
+//            preparedStatement.setString(3, employee.getGender());
+//            preparedStatement.setDate(4, Date.valueOf(employee.getBirthDate()));
+//            preparedStatement.setDate(5, Date.valueOf(employee.getHireDate()));
+//            preparedStatement.setInt(6, employee.getEmpNo());
+//
+//            preparedStatement.execute();
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void deleteEmployee(int empNo) {

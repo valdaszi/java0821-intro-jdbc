@@ -35,10 +35,6 @@ public class ConnectionsManager {
     }
 
     public ConnectionsManager() {
-
-        //properties.load();
-
-
         HikariConfig config = new HikariConfig();
 
         config.setJdbcUrl(getProperties().getProperty("jdbc.url"));

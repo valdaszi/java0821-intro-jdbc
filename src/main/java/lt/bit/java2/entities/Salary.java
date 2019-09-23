@@ -1,14 +1,37 @@
 package lt.bit.java2.entities;
 
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Objects;
 
+@Entity
+@Table(name = "salaries")
+@IdClass(SalaryPK.class)
 public class Salary {
-//    private Integer empNo;
+    @Id
+    @Column(name = "emp_no", insertable = false, updatable = false)
+    private Integer empNo;
+
+    @ManyToOne
+    @JoinColumn(name = "emp_no")
     private Employee employee;
+
+    @Id
+    @Column(name = "from_date", insertable = false, updatable = false)
     private LocalDate fromDate;
+
+    @Column(name = "to_date")
     private LocalDate toDate;
+
     private Integer salary;
 
+    public Integer getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(Integer empNo) {
+        this.empNo = empNo;
+    }
 
     public Employee getEmployee() {
         return employee;
@@ -53,5 +76,21 @@ public class Salary {
                 ", toDate=" + toDate +
                 ", salary=" + salary +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Salary salary1 = (Salary) o;
+        return Objects.equals(employee, salary1.employee) &&
+                Objects.equals(fromDate, salary1.fromDate) &&
+                Objects.equals(toDate, salary1.toDate) &&
+                Objects.equals(salary, salary1.salary);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(employee, fromDate, toDate, salary);
     }
 }

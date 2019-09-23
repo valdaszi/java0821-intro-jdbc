@@ -1,13 +1,15 @@
 package lt.bit.java2;
 
 import lt.bit.java2.entities.Employee;
+import lt.bit.java2.entities.Salary;
 import lt.bit.java2.services.ConnectionsManager;
 import lt.bit.java2.services.EmployeeService;
+import lt.bit.java2.services.EntityManagerUtil;
 
+import javax.persistence.EntityManager;
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Testinis uždavinukas parodantis kaip prisijungti prie MySQL DB su JDBC
@@ -50,9 +52,26 @@ public class Mysql {
 //        employeeService.setUseConnectionPool(true);
 //        test(employeeService);
 
-        EmployeeService employeeService = new EmployeeService();
-        Employee emp10001 = employeeService.getEmployee(10001);
-        System.out.println(emp10001);
+//        EmployeeService employeeService = new EmployeeService();
+//        Employee emp10001 = employeeService.getEmployee(10001);
+//        System.out.println(emp10001);
+
+        EntityManager em = EntityManagerUtil.getEntityManager();
+        Employee employee = em.find(Employee.class, 1);
+        System.out.println(employee);
+
+//        try {
+//            em.getTransaction().begin();
+//            employee.setFirstName("Morkis");
+//            em.persist(employee);
+//            em.getTransaction().commit();
+//        } catch (Exception e) {
+//            em.getTransaction().rollback();
+//        }
+
+        em = EntityManagerUtil.getEntityManager();
+        employee = em.find(Employee.class, 10001);
+        System.out.println(employee);
     }
 
     static void test(EmployeeService employeeService) {
@@ -66,7 +85,4 @@ public class Mysql {
 
         System.out.println(employees.size() + " in " + (stop - start) + "ms");
     }
-
-
 }
-

@@ -1,35 +1,37 @@
 package lt.bit.java2.entities;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Objects;
 
-/**
- * Employee entity
- * <ul>
- *     <li>Pirmas</li>
- *     <li>antras</li>
- * </ul>
- *  <br>
- *     <strong>Ohoho</strong> o cia paprastas tekstas
- *     <pre>
- *         ssdsdsdsd sdsd
- *         sdsdsdsd sdsdsdsd sdsdsd
- *         sdsdsds
- *     </pre>
- */
+@Entity
+@Table(name = "employees")
 public class Employee {
 
     /**
      * Primary key
      */
+    @Id
+    @Column(name = "emp_no")
     private Integer empNo;
 
+    @Column(name = "first_name")
     private String firstName;
+
+    @Column(name = "last_name")
     private String lastName;
+
+    @Column(name = "birth_date")
     private LocalDate birthDate;
+
+    @Column(name = "hire_date")
     private LocalDate hireDate;
+
+    @Column(columnDefinition = "enum (Types#CHAR)")
     private String gender;
 
+    @OneToMany(mappedBy = "employee")
     private Collection<Salary> salaries;
 
     public Integer getEmpNo() {
@@ -99,5 +101,24 @@ public class Employee {
                 ", gender='" + gender + '\'' +
                 ", salaries=" + getSalaries() +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return Objects.equals(empNo, employee.empNo) &&
+                Objects.equals(firstName, employee.firstName) &&
+                Objects.equals(lastName, employee.lastName) &&
+                Objects.equals(birthDate, employee.birthDate) &&
+                Objects.equals(hireDate, employee.hireDate) &&
+                Objects.equals(gender, employee.gender); // &&
+//                Objects.equals(salaries, employee.salaries);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(empNo, firstName, lastName, birthDate, hireDate, gender); //, salaries);
     }
 }
