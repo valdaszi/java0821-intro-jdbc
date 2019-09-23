@@ -56,22 +56,83 @@ public class Mysql {
 //        Employee emp10001 = employeeService.getEmployee(10001);
 //        System.out.println(emp10001);
 
+        selectExample(1);
+
+        updateExample(1, "Burokas");
+        selectExample(1);
+
+        updateExample(1, "Morkis");
+        selectExample(1);
+
+        selectExample(1);
+        selectExample(10001);
+
+        createExample();
+        selectExample(2);
+
+        deleteExample(2);
+        selectExample(2);
+    }
+
+    static void selectExample(int empNo) {
+        System.out.println();
+        System.out.println("*** selectExample *** " + empNo);
         EntityManager em = EntityManagerUtil.getEntityManager();
-        Employee employee = em.find(Employee.class, 1);
+        Employee employee = em.find(Employee.class, empNo);
+        System.out.println(employee);
+        em.close();
+    }
+
+    static void updateExample(int empNo, String firstName) {
+        System.out.println();
+        System.out.println("*** updateExample *** " + empNo + " " + firstName);
+        EntityManager em = EntityManagerUtil.getEntityManager();
+        Employee employee = em.find(Employee.class, empNo);
         System.out.println(employee);
 
-//        try {
-//            em.getTransaction().begin();
-//            employee.setFirstName("Morkis");
-//            em.persist(employee);
-//            em.getTransaction().commit();
-//        } catch (Exception e) {
-//            em.getTransaction().rollback();
-//        }
+        try {
+            em.getTransaction().begin();
+            employee.setFirstName(firstName);
+            em.persist(employee);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+        em.close();
+    }
 
-        em = EntityManagerUtil.getEntityManager();
-        employee = em.find(Employee.class, 10001);
-        System.out.println(employee);
+    static void createExample() {
+        System.out.println();
+        System.out.println("*** createExample ***");
+        Employee employee = new Employee();
+        employee.setEmpNo(2);
+        employee.setFirstName("Žiurkė");
+        employee.setLastName("Ėdžiūnė");
+        employee.setBirthDate(LocalDate.of(1999, 12, 31));
+        employee.setHireDate(LocalDate.of(2019, 6, 24));
+
+        EntityManager em = EntityManagerUtil.getEntityManager();
+        em.getTransaction().begin();
+
+        em.merge(employee);
+
+        em.getTransaction().commit();
+        em.close();
+    }
+
+    static void deleteExample(int empNo) {
+        System.out.println();
+        System.out.println("*** deleteExample *** " + empNo);
+        EntityManager em = EntityManagerUtil.getEntityManager();
+        em.getTransaction().begin();
+
+        Employee employee = em.find(Employee.class, empNo);
+        if (employee != null) {
+            em.remove(employee);
+        }
+
+        em.getTransaction().commit();
+        em.close();
     }
 
     static void test(EmployeeService employeeService) {
