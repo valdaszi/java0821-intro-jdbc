@@ -8,12 +8,10 @@ import java.util.Objects;
 @Table(name = "salaries")
 @IdClass(SalaryPK.class)
 public class Salary {
-    @Id
-    @Column(name = "emp_no", insertable = false, updatable = false)
-    private Integer empNo;
 
+    @Id
     @ManyToOne
-    @JoinColumn(name = "emp_no")
+    @JoinColumn(name = "emp_no", referencedColumnName = "emp_no", nullable = false)
     private Employee employee;
 
     @Id
@@ -25,13 +23,6 @@ public class Salary {
 
     private Integer salary;
 
-    public Integer getEmpNo() {
-        return empNo;
-    }
-
-    public void setEmpNo(Integer empNo) {
-        this.empNo = empNo;
-    }
 
     public Employee getEmployee() {
         return employee;

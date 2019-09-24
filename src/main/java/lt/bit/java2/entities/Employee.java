@@ -31,7 +31,7 @@ public class Employee {
     @Column(columnDefinition = "enum (Types#CHAR)")
     private String gender;
 
-    @OneToMany(mappedBy = "employee")
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private Collection<Salary> salaries;
 
     public Integer getEmpNo() {

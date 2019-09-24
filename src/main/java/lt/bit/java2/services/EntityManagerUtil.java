@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.function.Consumer;
 
 public class EntityManagerUtil {
 
@@ -72,6 +73,16 @@ public class EntityManagerUtil {
 
     static public EntityManager getEntityManager() {
         return entityManagerFactory.createEntityManager();
+    }
+
+    static public void executeInTransaction(Consumer<EntityManager> consumer) {
+        EntityManager entityManager = getEntityManager();
+        entityManager.getTransaction().begin();
+
+        consumer.accept(entityManager);
+
+        entityManager.getTransaction().commit();
+        entityManager.close();
     }
 
 }

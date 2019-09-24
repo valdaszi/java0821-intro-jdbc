@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Testinis uždavinukas parodantis kaip prisijungti prie MySQL DB su JDBC
@@ -67,7 +68,9 @@ public class Mysql {
         selectExample(1);
         selectExample(10001);
 
-        createExample();
+        createExample(2);
+        selectExample(2);
+        addSalaryExample(2);
         selectExample(2);
 
         deleteExample(2);
@@ -101,13 +104,14 @@ public class Mysql {
         em.close();
     }
 
-    static void createExample() {
+    static void createExample(int empNo) {
         System.out.println();
-        System.out.println("*** createExample ***");
+        System.out.println("*** createExample *** " + empNo);
         Employee employee = new Employee();
-        employee.setEmpNo(2);
+        employee.setEmpNo(empNo);
         employee.setFirstName("Žiurkė");
         employee.setLastName("Ėdžiūnė");
+        employee.setGender("M");
         employee.setBirthDate(LocalDate.of(1999, 12, 31));
         employee.setHireDate(LocalDate.of(2019, 6, 24));
 
@@ -118,6 +122,30 @@ public class Mysql {
 
         em.getTransaction().commit();
         em.close();
+    }
+
+    static void addSalaryExample(int empNo) {
+        System.out.println();
+        System.out.println("*** addSalaryExample *** " + empNo);
+
+        EntityManagerUtil.executeInTransaction(entityManager -> {
+            Employee employee = entityManager.find(Employee.class, empNo);
+            if (employee == null) return;
+
+            Salary salary = new Salary();
+//            salary.setEmpNo(empNo);
+            salary.setFromDate(LocalDate.now());
+            salary.setToDate(LocalDate.of(9999, 1, 1));
+            salary.setSalary(10000);
+            salary.setEmployee(employee);
+
+            entityManager.persist(salary);
+
+//            employee.setSalaries(new ArrayList<>());
+//            employee.getSalaries().add(salary);
+//
+//            entityManager.persist(employee);
+        });
     }
 
     static void deleteExample(int empNo) {

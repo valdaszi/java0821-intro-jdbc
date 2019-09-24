@@ -5,8 +5,29 @@ import java.time.LocalDate;
 
 public class SalaryPK implements Serializable {
 
-    int empNo;
+    private Employee employee;
+    private LocalDate fromDate;
 
-    LocalDate fromDate;
+    private SalaryPK() {}
 
+    public SalaryPK(Employee employee, LocalDate fromDate) {
+        this.employee = employee;
+        this.fromDate = fromDate;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public LocalDate getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(LocalDate fromDate) {
+        this.fromDate = fromDate;
+    }
 }
