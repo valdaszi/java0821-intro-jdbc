@@ -72,6 +72,8 @@ public class Mysql {
         selectExample(2);
         addSalaryExample(2);
         selectExample(2);
+        deleteSalaryExample(2);
+        selectExample(2);
 
         deleteExample(2);
         selectExample(2);
@@ -133,18 +135,30 @@ public class Mysql {
             if (employee == null) return;
 
             Salary salary = new Salary();
-//            salary.setEmpNo(empNo);
             salary.setFromDate(LocalDate.now());
             salary.setToDate(LocalDate.of(9999, 1, 1));
             salary.setSalary(10000);
             salary.setEmployee(employee);
 
-            entityManager.persist(salary);
+//            entityManager.persist(salary);
 
-//            employee.setSalaries(new ArrayList<>());
-//            employee.getSalaries().add(salary);
-//
-//            entityManager.persist(employee);
+            employee.setSalaries(new ArrayList<>());
+            employee.getSalaries().add(salary);
+
+            entityManager.persist(employee);
+        });
+    }
+
+    static void deleteSalaryExample(int empNo) {
+        System.out.println();
+        System.out.println("*** deleteSalaryExample *** " + empNo);
+        EntityManagerUtil.executeInTransaction(entityManager -> {
+            //TODO neveikia gerai!!!
+            Employee employee = entityManager.find(Employee.class, empNo);
+            Salary salary = employee.getSalaries().iterator().next();
+//            salary.setEmployee(null);
+//            employee.getSalaries().remove(salary);
+            entityManager.remove(salary);
         });
     }
 
